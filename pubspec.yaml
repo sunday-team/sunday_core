@@ -1,6 +1,6 @@
 name: sunday_core
 description: "A Flutter package for Sunday, required for all sunday packages"
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/sunday-team/sunday_core
 
 environment:
