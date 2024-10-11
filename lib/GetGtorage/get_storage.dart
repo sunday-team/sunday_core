@@ -1,4 +1,6 @@
 // Class definition
+import 'dart:async';
+
 import 'package:get_storage/get_storage.dart';
 
 class SundayGetStorage {
@@ -24,7 +26,7 @@ class SundayGetStorage {
   }
 
   // Function to listen for changes in the storage
-  void listenForChanges() {
+  void listenBox() {
     disposeListen = box.listen(() {
       print('box changed');
     });
@@ -47,5 +49,36 @@ class SundayGetStorage {
   // Function to create a new storage container
   SundayGetStorage createStorage({String? storageName}) {
     return SundayGetStorage(storageName: storageName);
+  }
+
+  // Function to get a stream of changes for a specific key
+  Stream<T?> listenKey<T>(String key) {
+    final controller = StreamController<T?>();
+    disposeListen = box.listen(() {
+      controller.add(box.read<T>(key));
+    });
+
+    // Ensure the stream controller is closed when the stream is no longer in use
+    controller.onCancel = () {
+      disposeListen?.call();
+      controller.close();
+    };
+
+    return controller.stream;
+  }
+
+  Stream<T?> streamUsingKey<T>(String key) {
+    final controller = StreamController<T?>();
+    disposeListen = box.listenKey(key, (value) {
+      controller.add(value as T?);
+    });
+
+    // Ensure the stream controller is closed when the stream is no longer in use
+    controller.onCancel = () {
+      disposeListen?.call();
+      controller.close();
+    };
+
+    return controller.stream;
   }
 }
