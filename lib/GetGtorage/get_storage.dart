@@ -1,57 +1,82 @@
-// Class definition
 import 'dart:async';
 
 import 'package:get_storage/get_storage.dart';
 
+/// A wrapper class for GetStorage providing additional functionality
 class SundayGetStorage {
+  /// The name of the storage container
   final String? storageName;
+
+  /// The GetStorage instance
   final GetStorage box;
+
+  /// Function to dispose of the listener
   Function? disposeListen;
 
+  /// Creates a new instance of SundayGetStorage
+  ///
+  /// [storageName] is an optional parameter to specify the name of the storage container
   SundayGetStorage({this.storageName}) : box = GetStorage(storageName ?? '');
 
-  // Function to read a value from storage
+  /// Reads a value from storage
+  ///
+  /// [key] is the key of the value to be read
+  /// Returns a Future that completes with the value of type T, or null if not found
   Future<T?> read<T>(String key) async {
     return box.read(key);
   }
 
-  // Function to write a value to storage
+  /// Writes a value to storage
+  ///
+  /// [key] is the key under which the value will be stored
+  /// [value] is the value to be stored
   Future<void> write(String key, dynamic value) async {
     box.write(key, value);
   }
 
-  // Function to remove a value from storage
+  /// Removes a value from storage
+  ///
+  /// [key] is the key of the value to be removed
   Future<void> remove(String key) async {
     box.remove(key);
   }
 
-  // Function to listen for changes in the storage
+  /// Listens for changes in the storage
   void listenBox() {
     disposeListen = box.listen(() {
       print('box changed');
     });
   }
 
-  // Function to dispose of the listener
+  /// Disposes of the listener
   void disposeListener() {
     disposeListen?.call();
   }
 
+  /// Erases all data in the storage
   void erase() {
     box.erase();
   }
 
-  // Function to initialize a specific container
+  /// Initializes a specific storage container
+  ///
+  /// [storageName] is an optional parameter to specify the name of the storage container
   Future<void> init({String? storageName}) async {
     await GetStorage.init(storageName ?? '');
   }
 
-  // Function to create a new storage container
+  /// Creates a new storage container
+  ///
+  /// [storageName] is an optional parameter to specify the name of the new storage container
+  /// Returns a new instance of SundayGetStorage
   SundayGetStorage createStorage({String? storageName}) {
     return SundayGetStorage(storageName: storageName);
   }
 
-  // Function to get a stream of changes for a specific key
+  /// Gets a stream of changes for a specific key
+  ///
+  /// [key] is the key to listen for changes
+  /// Returns a Stream that emits the new value whenever it changes
   Stream<T?> listenKey<T>(String key) {
     final controller = StreamController<T?>();
     disposeListen = box.listen(() {
@@ -67,6 +92,10 @@ class SundayGetStorage {
     return controller.stream;
   }
 
+  /// Gets a stream of changes for a specific key using GetStorage's listenKey method
+  ///
+  /// [key] is the key to listen for changes
+  /// Returns a Stream that emits the new value whenever it changes
   Stream<T?> streamUsingKey<T>(String key) {
     final controller = StreamController<T?>();
     disposeListen = box.listenKey(key, (value) {

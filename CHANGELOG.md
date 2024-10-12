@@ -7,3 +7,7 @@
 * Added streamUsingKey to GetStorage
 
 * edited listen to listenBox
+
+## 0.0.4
+
+* Documentation and fix
