@@ -11,3 +11,7 @@
 ## 0.0.4
 
 * Documentation and fix
+
+## 0.0.5
+
+* Removed GetStorage
