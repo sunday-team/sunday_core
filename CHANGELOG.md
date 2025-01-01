@@ -15,3 +15,7 @@
 ## 0.0.5
 
 * Removed GetStorage
+
+## 0.0.6
+
+* Updated Dart sdk
